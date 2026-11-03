@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex"><meta name="theme-color" content="#0b8a3e"><link rel="icon" href="https://i.imgur.com/d6TxLMp.png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="admin.css"><title>ZamHub | Admin dashboard</title></head><body>
+<header class="top"><a class="ibtn" href="web5.html" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></a><img src="https://i.imgur.com/d6TxLMp.png" alt="ZamHub"><h1>Admin dashboard</h1><button class="ibtn" data-logout aria-label="Log out"><i class="fa-solid fa-right-from-bracket"></i></button></header>
+<main id="app" hidden class="wrap">
+<section class="grid" id="stats"></section>
+<section class="panel"><form class="fm" id="sf"><label><span>Search by name, email, user code or ID</span><input id="q" placeholder="Search"></label><button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button></form></section>
+<section class="panel"><h2>Users</h2><div class="tl" id="list"></div><div class="acts" style="margin-top:12px"><button class="btn line" id="more" type="button" hidden>Load more</button></div></section>
+</main>
+<script type="module" src="admin.js"></script></body></html>

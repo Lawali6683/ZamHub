@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#0b8a3e"><link rel="icon" href="https://i.imgur.com/d6TxLMp.png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="site.css"><title>ZamHub | About</title>
+<style>
+:root{--zg:#0b8a3e;--zgd:#065a28;--zr:#d62828}
+.zh-ceo{position:relative;display:grid;gap:26px;margin:0 0 30px}
+.zh-photo{position:relative;isolation:isolate;max-width:420px;width:100%;margin:8px auto 0}
+.zh-photo::before{content:"";position:absolute;inset:-14px;z-index:-1;border-radius:36px;background:conic-gradient(from 160deg,var(--zg),#7be495,var(--zr),var(--zg));filter:blur(22px);opacity:.45;animation:zhSpin 9s linear infinite}
+.zh-frame{padding:3px;border-radius:30px;background:linear-gradient(145deg,var(--zg),#a8f0bd 45%,var(--zr))}
+.zh-frame-in{position:relative;border-radius:27px;overflow:hidden;background:#0d1f14;aspect-ratio:4/5}
+.zh-frame-in img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block;transition:transform .8s ease}
+.zh-photo:hover img{transform:scale(1.05)}
+.zh-frame-in::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(6,40,20,.92) 0%,rgba(6,40,20,.35) 32%,transparent 55%)}
+.zh-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 18px 20px;color:#fff}
+.zh-cap b{display:block;font-size:1.25rem;letter-spacing:.2px}
+.zh-cap span{font-size:.85rem;opacity:.85}
+.zh-chip{position:absolute;top:14px;left:14px;z-index:3;display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;font-size:.75rem;font-weight:700;color:#fff;background:rgba(255,255,255,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.35)}
+.zh-chip i{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 4px rgba(74,222,128,.3)}
+.zh-links{display:flex;gap:10px;margin-top:14px;justify-content:center;flex-wrap:wrap}
+.zh-links a{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:14px;font-size:.88rem;font-weight:600;text-decoration:none;color:var(--zgd);background:#fff;border:1px solid rgba(11,138,62,.25);box-shadow:0 6px 18px rgba(11,138,62,.12)}
+.zh-bio{padding:4px 2px}
+.zh-bio h3{display:flex;align-items:center;gap:10px;margin:26px 0 8px;color:var(--zgd)}
+.zh-bio h3::before{content:"";width:6px;height:22px;border-radius:4px;background:linear-gradient(var(--zg),var(--zr))}
+.zh-bio h3:first-child{margin-top:0}
+.zh-bio p{line-height:1.75}
+.zh-motto{margin-top:24px;padding:18px 20px;border-radius:20px;color:#fff;font-weight:800;letter-spacing:.6px;text-align:center;background:linear-gradient(120deg,var(--zgd),var(--zg) 60%,#16a34a);box-shadow:0 14px 30px rgba(11,138,62,.3)}
+.idt-box{position:relative;overflow:hidden;margin:44px 0 10px;padding:26px 20px;border-radius:30px;color:#fff;background:radial-gradient(circle at 85% 0%,rgba(214,40,40,.55),transparent 45%),radial-gradient(circle at 0% 100%,rgba(34,197,94,.45),transparent 50%),#071a10}
+.idt-box::before{content:"";position:absolute;inset:0;opacity:.07;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:26px 26px}
+.idt-box>*{position:relative}
+.idt-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25)}
+.idt-box h2{margin:14px 0 6px;font-size:1.6rem;color:#fff}
+.idt-box p{opacity:.88;line-height:1.7;margin:0 0 16px}
+.idt-logo{display:block;width:calc(100% + 40px);max-width:none;height:auto;max-height:300px;margin:-26px -20px 22px;object-fit:contain;background:#fff;border-bottom:5px solid transparent;border-image:linear-gradient(90deg,var(--zg),#4ade80,var(--zr)) 1}
+.idt-ceo{display:flex;align-items:center;gap:14px;margin:18px 0;padding:14px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px)}
+.idt-ceo img{width:92px;height:92px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:3px solid transparent;background:linear-gradient(#071a10,#071a10) padding-box,linear-gradient(135deg,#4ade80,#ef4444) border-box;flex:none}
+.idt-ceo b{display:block;font-size:1.08rem}
+.idt-ceo span{font-size:.82rem;opacity:.8}
+.idt-cta{display:grid;gap:10px}
+.idt-cta a{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:16px;text-decoration:none;font-weight:600;font-size:.92rem;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);word-break:break-all}
+.idt-cta a i{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;flex:none;background:linear-gradient(135deg,var(--zg),#22c55e)}
+.idt-cta a.main{background:linear-gradient(120deg,var(--zr),#ef4444);border:0}
+.idt-cta a.main i{background:rgba(255,255,255,.22)}
+.zh-rev{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.zh-rev.on{opacity:1;transform:none}
+@keyframes zhSpin{to{transform:rotate(360deg)}}
+@media(min-width:760px){.idt-box{padding:36px}.idt-logo{width:calc(100% + 72px);margin:-36px -36px 26px;max-height:340px}.idt-cta{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:860px){.zh-ceo{grid-template-columns:400px 1fr;align-items:start;gap:44px}.zh-photo{position:sticky;top:96px;margin:0}}
+@media(prefers-reduced-motion:reduce){.zh-photo::before{animation:none}.zh-rev{opacity:1;transform:none}}
+</style></head><body>
+<div id="hdr"></div>
+<main class="page w"><h1>Meet our CEO</h1><p style="color:var(--mute);margin-bottom:18px">Malam Umar Maiwata - Founder &amp; Chief Executive Officer (CEO), ZAMHUB NIG LTD</p>
+<section class="zh-ceo">
+<div class="zh-photo zh-rev">
+<div class="zh-frame"><div class="zh-frame-in">
+<span class="zh-chip"><i></i> Founder &amp; CEO</span>
+<img src="https://i.imgur.com/C1i7rDs.jpeg" alt="Malam Umar Maiwata" loading="lazy">
+<div class="zh-cap"><b>Malam Umar Maiwata</b><span>ZAMHUB NIG LTD &middot; We Shape Tomorrow</span></div>
+</div></div>
+<div class="zh-links">
+<a href="mailto:zamhubnigltd@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
+<a href="tel:+2347066889998"><i class="fa-solid fa-phone"></i> +234 706 688 9998</a>
+</div>
+</div>
+<div class="zh-bio zh-rev"><h3>About the CEO</h3>
+<p>Malam Umar Maiwata is a Computer Scientist, Technology Entrepreneur, Crypto Strategist, and Web3 Solutions Specialist with a strong interest in digital innovation, blockchain technology, financial markets, and technology-driven entrepreneurship.</p>
+<p>As the Founder and Chief Executive Officer of ZAMHUB NIG LTD, he leads the company's vision of building an integrated digital ecosystem that connects technology, education, entrepreneurship, and emerging digital opportunities.</p>
+<p>His work focuses on creating practical opportunities for individuals and businesses through digital solutions, technology education, cryptocurrency trading education, decentralized finance (DeFi), blockchain innovation, and Web3 career development.</p>
+<p>With a vision of making digital knowledge and opportunities more accessible, he is committed to helping young people develop relevant skills, understand emerging technologies, and participate more effectively in the global digital economy.</p>
+<h3>Technology &amp; Digital Solutions</h3>
+<p>Through ZAMHUB, he promotes the use of technology to solve practical problems, improve business operations, and create new opportunities for individuals and organizations.</p>
+<p>His vision encompasses digital services, technology-driven business solutions, and innovative platforms designed to meet the changing needs of the digital economy.</p>
+<h3>Cryptocurrency &amp; Web3</h3>
+<p>As a Crypto Strategist and Web3 practitioner, he focuses on cryptocurrency market research, centralized and decentralized exchanges (CEX and DEX), on-chain analysis, trading strategies, blockchain education, and emerging Web3 opportunities.</p>
+<p>His approach emphasizes research, risk management, discipline, continuous learning, and responsible participation in digital asset markets.</p>
+<h3>Digital Education &amp; Empowerment</h3>
+<p>He believes that access to relevant digital education is essential for Africa's future.</p>
+<p>Through digital learning initiatives and academy programmes, his vision is to support individuals in developing practical skills in cryptocurrency, blockchain technology, Web3, digital entrepreneurship, and other emerging technology fields.</p>
+<p>His goal is to help learners move beyond theoretical knowledge and develop skills they can apply in real-world situations.</p>
+<h3>Entrepreneurship &amp; Business Development</h3>
+<p>He is passionate about building sustainable businesses, developing innovative ideas, and creating platforms that connect people with knowledge, technology, and opportunities.</p>
+<p>His leadership philosophy centres on innovation, strategic thinking, community empowerment, and long-term value creation.</p>
+<h3>Vision for ZAMHUB</h3>
+<p>To build ZAMHUB into a trusted African digital ecosystem where technology, education, entrepreneurship, blockchain innovation, and digital opportunities converge to empower individuals and businesses.</p>
+<h3>Leadership Philosophy</h3>
+<p>Empower people with knowledge, equip them with technology, and create opportunities that drive sustainable progress.</p>
+<div class="zh-motto">Our Motto: WE SHAPE TOMORROW.</div></div>
+</section>
+<section class="idt-box zh-rev" id="idt">
+<img class="idt-logo" src="https://i.imgur.com/mUPyafr.png" alt="IDT logo" loading="lazy">
+<span class="idt-tag"><i class="fa-solid fa-code"></i> Developed by IDT</span>
+<h2>This software was designed and built by IDT</h2>
+<p>Need a website, mobile app or custom software like this one? Don't hesitate, contact IDT today.</p>
+<div class="idt-ceo">
+<img src="https://i.imgur.com/P2bfZCp.jpeg" alt="Comrd Haruna Lawali" loading="lazy">
+<div><b>Comrd Haruna Lawali</b><span>CEO, IDT</span></div>
+</div>
+<div class="idt-cta">
+<a class="main" href="tel:+2348166836059"><i class="fa-solid fa-phone"></i> 08166836059</a>
+<a href="mailto:harunalawali5522@gmail.com"><i class="fa-solid fa-envelope"></i> harunalawali5522@gmail.com</a>
+<a href="https://www.idt.com.ng" target="_blank" rel="noopener"><i class="fa-solid fa-globe"></i> www.idt.com.ng</a>
+</div>
+</section>
+</main>
+<div id="ftr"></div>
+<script type="module" src="site.js"></script>
+<script>
+(function(){var els=document.querySelectorAll('.zh-rev');
+if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('on')});return}
+var io=new IntersectionObserver(function(a){a.forEach(function(x){if(x.isIntersecting){x.target.classList.add('on');io.unobserve(x.target)}})},{threshold:.12});
+els.forEach(function(e){io.observe(e)})})();
+</script></body></html>

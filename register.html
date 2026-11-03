@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZamHub | Login or Register</title>
+<meta name="theme-color" content="#0b8a3e">
+<link rel="icon" href="https://i.imgur.com/d6TxLMp.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="register.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"></head>
+<body>
+<div id="hdr"></div>
+<main class="shell">
+  <section class="brand">
+    <img src="https://i.imgur.com/d6TxLMp.png" alt="ZamHub logo" width="150" height="150">
+    <h1>Learn skills that shape tomorrow</h1>
+    <ul>
+      <li><i class="fa-solid fa-coins"></i> Crypto</li>
+      <li><i class="fa-solid fa-palette"></i> Graphics design</li>
+      <li><i class="fa-solid fa-laptop-code"></i> Technology</li>
+      <li><i class="fa-solid fa-graduation-cap"></i> Education</li>
+    </ul>
+  </section>
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button class="tab on" id="tabLogin" role="tab" aria-selected="true" type="button"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+      <button class="tab" id="tabReg" role="tab" aria-selected="false" type="button"><i class="fa-solid fa-user-plus"></i> Register</button>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <label class="f"><span>Email</span>
+        <div class="in"><i class="fa-solid fa-envelope"></i><input id="lEmail" type="email" autocomplete="email" required></div>
+      </label>
+      <label class="f"><span>Password</span>
+        <div class="in"><i class="fa-solid fa-lock"></i><input id="lPass" type="password" autocomplete="current-password" required>
+        <button class="eye" type="button" data-eye="lPass" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
+      </label>
+      <a class="forget" href="forget.html">Forgot password?</a>
+      <button class="btn" id="loginBtn" type="submit">Log in</button>
+    </form>
+
+    <form id="regForm" hidden novalidate>
+      <label class="f"><span>Full name</span>
+        <div class="in"><i class="fa-solid fa-user"></i><input id="rName" type="text" autocomplete="name" required></div>
+      </label>
+      <label class="f"><span>Email address</span>
+        <div class="in"><i class="fa-solid fa-envelope"></i><input id="rEmail" type="email" autocomplete="email" required></div>
+      </label>
+      <label class="f"><span>Phone number</span>
+        <div class="in"><i class="fa-solid fa-phone"></i><input id="rPhone" type="tel" autocomplete="tel" required></div>
+      </label>
+      <label class="f"><span>Gender</span>
+        <div class="in"><i class="fa-solid fa-venus-mars"></i>
+        <select id="rGender" required><option value="">Select gender</option><option value="male">Male</option><option value="female">Female</option></select></div>
+      </label>
+      <label class="f"><span>Course</span>
+        <div class="in"><i class="fa-solid fa-book-open"></i>
+        <select id="rCourse" required><option value="">Loading courses...</option></select></div>
+      </label>
+      <label class="f"><span>Password</span>
+        <div class="in"><i class="fa-solid fa-lock"></i><input id="rPass" type="password" autocomplete="new-password" required>
+        <button class="eye" type="button" data-eye="rPass" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
+      </label>
+      <label class="f"><span>Confirm password</span>
+        <div class="in"><i class="fa-solid fa-lock"></i><input id="rPass2" type="password" autocomplete="new-password" required>
+        <button class="eye" type="button" data-eye="rPass2" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
+      </label>
+      <button class="btn" id="regBtn" type="submit">Create my account</button>
+    </form>
+  </section>
+</main>
+<script type="module" src="site.js"></script>
+<script type="module" src="register.js"></script>
+</body>
+</html>
