@@ -13,7 +13,7 @@ const links = [
 const APP = document.body.dataset.app === '1'
 const LG = APP ? '' : '<span class="lg"><a class="btn line" href="register.html">Login</a><a class="btn" href="register.html?tab=register">Register</a></span>'
 const TAIL = APP
-  ? '<a href="register.html" id="lo"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>'
+  ? '<a href="certificate.html"><i class="fa-solid fa-certificate"></i> My certificate</a><a href="register.html" id="lo"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>'
   : '<a href="register.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a><a class="pri" href="register.html?tab=register"><i class="fa-solid fa-user-plus"></i> Register</a>'
 const hd = document.getElementById('hdr')
 if (hd) {
