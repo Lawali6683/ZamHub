@@ -1,6 +1,5 @@
 import { supabase } from './supabase.js'
 import { toast, busy } from './loader.js'
-import { slipPdf, answersPdf } from './pdf.js'
 
 const $ = (id) => document.getElementById(id)
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
@@ -163,14 +162,14 @@ function showResult(r) {
   const run = (fn) => async () => {
     busy(true)
     try {
-      await fn(info)
+      await (await import('./pdf.js'))[fn](info)
     } catch {
       toast('Could not create the PDF. Check your connection.', 'err')
     }
     busy(false)
   }
-  $('slipBtn').addEventListener('click', run(slipPdf))
-  $('ansBtn').addEventListener('click', run(answersPdf))
+  $('slipBtn').addEventListener('click', run('slipPdf'))
+  $('ansBtn').addEventListener('click', run('answersPdf'))
 }
 
 async function showHistory() {
