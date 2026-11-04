@@ -89,3 +89,4 @@ $('list').addEventListener('click', async (e) => {
 })
 
 initAdmin().then(load)
+
