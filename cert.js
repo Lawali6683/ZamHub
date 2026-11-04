@@ -1,5 +1,4 @@
 import { initAdmin, uploadToImgur, $ } from './admin-core.js'
-import { imagesToPdf } from './pdf.js'
 import { supabase } from './supabase.js'
 import { toast } from './loader.js'
 
@@ -46,7 +45,7 @@ function certBox(r) {
   })
   const cd = g.querySelector('#cd')
   cd && cd.addEventListener('click', async () => {
-    try { await imagesToPdf(old, 'zamhub-certificate.pdf') } catch { toast('Could not create the PDF.', 'err') }
+    try { await (await import('./pdf.js')).imagesToPdf(old, 'zamhub-certificate.pdf') } catch { toast('Could not create the PDF.', 'err') }
   })
   g.querySelector('#cs').addEventListener('click', async () => {
     const files = [...g.querySelector('#cf').files]
