@@ -1,6 +1,5 @@
 import { supabase } from './supabase.js'
 import { toast, busy } from './loader.js'
-import { imagesToPdf } from './pdf.js'
 
 const $ = (id) => document.getElementById(id)
 const LOGO = 'https://i.imgur.com/d6TxLMp.png'
@@ -88,6 +87,7 @@ async function startApp() {
   ])
   courses = all || []
   ownedIds = (owned || []).map((o) => o.course_id)
+  if (!ownedIds.length && profile.course_id) ownedIds = [profile.course_id]
   if (upd && upd.data) store = { courses: {}, history: [], watched: {}, ...upd.data }
   const pick = store.current_course && ownedIds.includes(store.current_course) ? store.current_course : ownedIds[0]
   if (!pick) {
@@ -99,6 +99,11 @@ async function startApp() {
 
 async function openCourse(id) {
   course = courses.find((c) => c.id === id)
+  if (!course) {
+    const { data: c1 } = await supabase.from('view_courser').select('*').eq('id', id).maybeSingle()
+    course = c1 || { id, course_name: profile.course_name, price: profile.course_price, image_url: '' }
+    courses.push(course)
+  }
   store.current_course = id
   const { data, error } = await supabase.from('course_topic').select('*').eq('course_id', id).order('topic_no')
   if (error) return toast('Could not load topics.', 'err')
@@ -138,7 +143,8 @@ function render() {
   $('certPdf') && $('certPdf').addEventListener('click', async () => {
     busy(true)
     try {
-      await imagesToPdf(cert.image_urls, 'zamhub-certificate.pdf')
+      const m = await import('./pdf.js')
+      await m.imagesToPdf(cert.image_urls, 'zamhub-certificate.pdf')
     } catch {
       toast('Could not create the PDF. Check your connection.', 'err')
     }
@@ -300,6 +306,12 @@ async function makePdf(t) {
   busy(false)
 }
 
+function fail(e) {
+  console.error(e)
+  $('root').innerHTML = '<div class="wrap"><div class="panel"><h2>Something went wrong</h2><p>We could not load your lessons. Please check your connection and try again.</p><div class="acts"><button class="btn" id="again" type="button">Try again</button></div></div></div>'
+  $('again').addEventListener('click', () => location.reload())
+}
+
 ;(async () => {
   const { data } = await supabase.auth.getUser()
   if (!data.user) {
@@ -313,6 +325,6 @@ async function makePdf(t) {
     return
   }
   profile = p
-  if (p.status === 'active') startApp()
-  else showLock()
+  if (p.status === 'active') startApp().catch(fail)
+  else showLock().catch(fail)
 })()
