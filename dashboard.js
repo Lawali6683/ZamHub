@@ -328,3 +328,4 @@ function fail(e) {
   if (p.status === 'active') startApp().catch(fail)
   else showLock().catch(fail)
 })()
+
