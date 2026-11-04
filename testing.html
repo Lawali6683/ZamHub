@@ -164,9 +164,12 @@ form[hidden]{display:none}
           <option value="female">Female</option>
         </select></div>
       </label>
-      <label class="f" id="courseField" hidden><span>Course <small>(optional)</small></span>
+      <label class="f" id="courseField"><span>Course</span>
         <div class="in"><i class="fa-solid fa-book-open"></i>
-        <select id="rCourse"><option value="">Select a course</option></select></div>
+        <select id="rCourse" required>
+          <option value="">Select a course</option>
+          <option value="00000000-0000-0000-0000-000000000001">Test Course - ₦0 (gwaji)</option>
+        </select></div>
       </label>
       <label class="f"><span>Password</span>
         <div class="in"><i class="fa-solid fa-lock"></i><input id="rPass" type="password" autocomplete="new-password" required>
@@ -186,7 +189,7 @@ form[hidden]{display:none}
 const $ = (id) => document.getElementById(id)
 const params = new URLSearchParams(location.search)
 const wantedCourse = params.get('course') || params.get('id') || ''
-const REQUIRE_COURSE = false
+const REQUIRE_COURSE = true
 
 let supabase = null
 try {
@@ -257,7 +260,6 @@ async function loadCourses() {
       opt.textContent = `${c.course_name} - ₦${Number(c.price).toLocaleString()} ${labels[c.billing] || ''}`
       select.appendChild(opt)
     })
-    $('courseField').hidden = false
     if (wantedCourse) {
       const match = data.find((c) => c.id === wantedCourse || c.course_code === wantedCourse)
       if (match) {
