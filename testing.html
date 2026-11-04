@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZamHub | Login or Register</title>
+<meta name="theme-color" content="#0b8a3e">
+<link rel="icon" type="image/png" href="https://i.imgur.com/d6TxLMp.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--green:#0b8a3e;--green-d:#06602b;--red:#d3222a;--ink:#16241b;--mute:#5b6b61;--paper:#f4fbf6;--line:#d8eadd}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;color:var(--ink);min-height:100vh;min-height:100dvh;line-height:1.5;background:linear-gradient(160deg,#ffffff 0%,#eaf8ee 55%,#fdecec 100%);padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+
+#zam-loader{position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s}
+#zam-loader.done{opacity:0;pointer-events:none}
+#zam-loader img{animation:zl-pop 1.4s ease-in-out infinite}
+#zam-loader p{color:var(--green-d);font-weight:600;letter-spacing:.04em}
+.zl-bar{width:150px;height:5px;border-radius:5px;background:var(--line);overflow:hidden}
+.zl-bar span{display:block;height:100%;width:40%;border-radius:5px;background:linear-gradient(90deg,var(--green),var(--red));animation:zl-run 1s ease-in-out infinite}
+@keyframes zl-run{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+@keyframes zl-pop{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+
+#tToasts{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:9998;display:flex;flex-direction:column;gap:10px;width:min(92vw,400px)}
+.zt{display:flex;gap:10px;align-items:flex-start;padding:13px 16px;border-radius:14px;background:#fff;border-left:5px solid var(--green);box-shadow:0 10px 30px rgba(6,60,30,.18);opacity:0;transform:translateY(-14px);transition:.3s}
+.zt.show{opacity:1;transform:none}
+.zt i{margin-top:3px}
+.zt-ok i{color:var(--green)}
+.zt-err{border-left-color:var(--red)}
+.zt-err i{color:var(--red)}
+.zt-warn{border-left-color:#e0a100}
+.zt-warn i{color:#e0a100}
+
+.shell{min-height:100dvh;display:grid;gap:24px;align-content:center;padding:22px 16px 40px;max-width:1040px;margin:auto}
+.brand{text-align:center}
+.brand img{margin:0 auto 12px;filter:drop-shadow(0 8px 16px rgba(6,60,30,.2))}
+.brand h1{font-size:clamp(1.35rem,4.5vw,2.1rem);line-height:1.2;color:var(--green-d);max-width:18ch;margin:0 auto 14px}
+.brand ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.brand li{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem}
+.brand li i{color:var(--red);margin-right:4px}
+
+.card{position:relative;background:#fff;border-radius:24px;padding:22px;box-shadow:0 20px 50px rgba(6,60,30,.14);border:1px solid var(--line);width:100%;max-width:460px;margin:auto;overflow:hidden;animation:rise .6s ease both}
+.card::before{content:"";position:absolute;inset:0;background:url(https://i.imgur.com/d6TxLMp.png) center/70% no-repeat;opacity:.06;pointer-events:none}
+.card>*{position:relative}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#eef6f0;border-radius:14px;padding:5px;margin-bottom:18px}
+.tab{border:0;background:transparent;padding:11px;border-radius:10px;cursor:pointer;font-weight:600;color:var(--mute);transition:.2s}
+.tab.on{background:var(--green);color:#fff;box-shadow:0 6px 14px rgba(11,138,62,.35)}
+
+form{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+form[hidden]{display:none}
+.f{min-width:0;display:block}
+.f span{display:block;font-size:.85rem;font-weight:600;margin-bottom:5px;color:var(--green-d)}
+.f small{font-weight:400;color:var(--mute)}
+.f[hidden]{display:none}
+.in{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:0 12px;transition:.2s;min-width:0;width:100%}
+.in:focus-within{border-color:var(--green);box-shadow:0 0 0 4px rgba(11,138,62,.12)}
+.in>i{color:var(--green)}
+.in input,.in select{width:0;flex:1 1 0;min-width:0;border:0;background:transparent;padding:13px 0;outline:0;font-size:16px}
+.eye{border:0;background:transparent;cursor:pointer;color:var(--mute);padding:8px}
+.forget{justify-self:end;color:var(--red);font-size:.88rem;text-decoration:none;font-weight:600}
+.btn{border:0;border-radius:14px;padding:14px;font-weight:700;font-size:1rem;color:#fff;cursor:pointer;background:linear-gradient(135deg,var(--green),var(--green-d));box-shadow:0 10px 22px rgba(11,138,62,.32);transition:transform .15s,opacity .2s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.6;cursor:wait}
+
+@media (min-width:880px){
+  .shell{grid-template-columns:1fr 1fr;align-items:center;gap:56px;padding-top:30px}
+  .brand{text-align:left}
+  .brand img{margin-left:0}
+  .brand h1,.brand ul{margin-left:0;justify-content:flex-start}
+  .card{padding:30px}
+}
+
+.hd{position:sticky;top:max(8px,env(safe-area-inset-top));z-index:100;margin:8px auto 0;width:min(96%,1100px);display:flex;align-items:center;gap:10px;padding:7px 10px 7px 14px;border-radius:999px;border:2px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(90deg,var(--green),var(--red)) border-box;box-shadow:0 10px 30px rgba(6,60,30,.15);animation:drop .8s cubic-bezier(.2,.7,.2,1) both}
+.hd img{width:40px;height:40px}
+.hd b{color:var(--green-d);flex:1;font-size:1.05rem}
+.hd .lg{display:none}
+.hd .lg .btn{display:inline-block;padding:9px 16px;font-size:.9rem;border-radius:999px;text-decoration:none;color:#fff}
+.hd .lg .btn.line{background:#fff;color:var(--green-d);border:2px solid var(--green);box-shadow:none}
+.brandlink{display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-decoration:none}
+.ibtn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--green-d);display:grid;place-items:center;cursor:pointer;text-decoration:none}
+@keyframes drop{from{transform:translateY(-80px);opacity:0}}
+@media (min-width:860px){.hd .lg{display:flex;gap:8px}}
+
+.drawer{position:fixed;inset:0;z-index:600;display:none}
+.drawer.on{display:block}
+.drawer .shade{position:absolute;inset:0;background:rgba(6,40,20,.4)}
+.drawer nav{position:absolute;right:0;top:0;bottom:0;width:min(84vw,320px);background:#fff;padding:max(16px,env(safe-area-inset-top)) 18px 18px;overflow:auto;animation:slide .3s ease}
+.drawer nav::before{content:"";position:absolute;inset:0;background:url(https://i.imgur.com/d6TxLMp.png) center/80% no-repeat;opacity:.07;pointer-events:none}
+.drawer nav>*{position:relative}
+.drawer .x{margin-left:auto;display:grid}
+.drawer a{display:flex;gap:12px;align-items:center;padding:13px 12px;margin-top:8px;border-radius:14px;text-decoration:none;color:var(--ink);font-weight:600;border:1px solid var(--line);background:#fff}
+.drawer a i{color:var(--green);width:22px;text-align:center}
+.drawer a.cur{border-color:var(--green);background:#eaf8ee}
+.drawer a.pri{background:var(--green);color:#fff}
+.drawer a.pri i{color:#fff}
+@keyframes slide{from{transform:translateX(100%)}to{transform:none}}
+
+.float{position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:90;display:grid;gap:10px}
+.float a{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.5rem;text-decoration:none;box-shadow:0 10px 22px rgba(0,0,0,.25);animation:bob 3s ease-in-out infinite}
+.float .wa{background:#25d366}
+.float .call{background:var(--red);animation-delay:-1.5s}
+@keyframes bob{50%{transform:translateY(-6px)}}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="hdr"></div>
+<div id="tToasts" aria-live="polite"></div>
+
+<main class="shell">
+  <section class="brand">
+    <img src="https://i.imgur.com/d6TxLMp.png" alt="ZamHub logo" width="150" height="150">
+    <h1>Learn skills that shape tomorrow</h1>
+    <ul>
+      <li><i class="fa-solid fa-coins"></i> Crypto</li>
+      <li><i class="fa-solid fa-palette"></i> Graphics design</li>
+      <li><i class="fa-solid fa-laptop-code"></i> Technology</li>
+      <li><i class="fa-solid fa-graduation-cap"></i> Education</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button class="tab on" id="tabLogin" role="tab" aria-selected="true" type="button"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+      <button class="tab" id="tabReg" role="tab" aria-selected="false" type="button"><i class="fa-solid fa-user-plus"></i> Register</button>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <label class="f"><span>Email</span>
+        <div class="in"><i class="fa-solid fa-envelope"></i><input id="lEmail" type="email" autocomplete="email" required></div>
+      </label>
+      <label class="f"><span>Password</span>
+        <div class="in"><i class="fa-solid fa-lock"></i><input id="lPass" type="password" autocomplete="current-password" required>
+        <button class="eye" type="button" data-eye="lPass" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
+      </label>
+      <a class="forget" href="forget.html">Forgot password?</a>
+      <button class="btn" id="loginBtn" type="submit">Log in</button>
+    </form>
+
+    <form id="regForm" hidden novalidate>
+      <label class="f"><span>Full name</span>
+        <div class="in"><i class="fa-solid fa-user"></i><input id="rName" type="text" autocomplete="name" required></div>
+      </label>
+      <label class="f"><span>Email address</span>
+        <div class="in"><i class="fa-solid fa-envelope"></i><input id="rEmail" type="email" autocomplete="email" required></div>
+      </label>
+      <label class="f"><span>Phone number</span>
+        <div class="in"><i class="fa-solid fa-phone"></i><input id="rPhone" type="tel" autocomplete="tel" required></div>
+      </label>
+      <label class="f"><span>Gender</span>
+        <div class="in"><i class="fa-solid fa-venus-mars"></i>
+        <select id="rGender" required>
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select></div>
+      </label>
+      <label class="f" id="courseField" hidden><span>Course <small>(optional)</small></span>
+        <div class="in"><i class="fa-solid fa-book-open"></i>
+        <select id="rCourse"><option value="">Select a course</option></select></div>
+      </label>
+      <label class="f"><span>Password</span>
+        <div class="in"><i class="fa-solid fa-lock"></i><input id="rPass" type="password" autocomplete="new-password" required>
+        <button class="eye" type="button" data-eye="rPass" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
+      </label>
+      <label class="f"><span>Confirm password</span>
+        <div class="in"><i class="fa-solid fa-lock"></i><input id="rPass2" type="password" autocomplete="new-password" required>
+        <button class="eye" type="button" data-eye="rPass2" aria-label="Show password"><i class="fa-solid fa-eye"></i></button></div>
+      </label>
+      <button class="btn" id="regBtn" type="submit">Create my account</button>
+    </form>
+  </section>
+</main>
+
+<script type="module" src="site.js"></script>
+<script type="module">
+const $ = (id) => document.getElementById(id)
+const params = new URLSearchParams(location.search)
+const wantedCourse = params.get('course') || params.get('id') || ''
+const REQUIRE_COURSE = false
+
+let supabase = null
+try {
+  const mod = await import('./supabase.js')
+  supabase = mod.supabase
+} catch {
+  supabase = null
+}
+
+function toast(message, type = 'ok') {
+  const kind = type === 'err' ? 'err' : type === 'warn' ? 'warn' : 'ok'
+  const icons = { ok: 'fa-circle-check', warn: 'fa-triangle-exclamation', err: 'fa-circle-xmark' }
+  const el = document.createElement('div')
+  el.className = `zt zt-${kind}`
+  const icon = document.createElement('i')
+  icon.className = `fa-solid ${icons[kind]}`
+  const text = document.createElement('div')
+  text.textContent = message
+  el.append(icon, text)
+  $('tToasts').appendChild(el)
+  requestAnimationFrame(() => el.classList.add('show'))
+  setTimeout(() => {
+    el.classList.remove('show')
+    setTimeout(() => el.remove(), 300)
+  }, 4000)
+}
+
+const tabLogin = $('tabLogin')
+const tabReg = $('tabReg')
+const loginForm = $('loginForm')
+const regForm = $('regForm')
+
+function showTab(which) {
+  const login = which === 'login'
+  loginForm.hidden = !login
+  regForm.hidden = login
+  tabLogin.classList.toggle('on', login)
+  tabReg.classList.toggle('on', !login)
+  tabLogin.setAttribute('aria-selected', String(login))
+  tabReg.setAttribute('aria-selected', String(!login))
+}
+
+tabLogin.addEventListener('click', () => showTab('login'))
+tabReg.addEventListener('click', () => showTab('register'))
+
+document.querySelectorAll('[data-eye]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const input = $(btn.dataset.eye)
+    const show = input.type === 'password'
+    input.type = show ? 'text' : 'password'
+    btn.querySelector('i').className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'
+  })
+})
+
+async function loadCourses() {
+  if (!supabase) return
+  try {
+    const { data, error } = await supabase
+      .from('view_courser')
+      .select('id,course_name,course_code,price,billing')
+      .order('created_at', { ascending: false })
+    if (error || !data || !data.length) return
+    const labels = { one_time: 'one time', weekly: 'per week', monthly: 'per month', yearly: 'per year' }
+    const select = $('rCourse')
+    data.forEach((c) => {
+      const opt = document.createElement('option')
+      opt.value = c.id
+      opt.textContent = `${c.course_name} - ₦${Number(c.price).toLocaleString()} ${labels[c.billing] || ''}`
+      select.appendChild(opt)
+    })
+    $('courseField').hidden = false
+    if (wantedCourse) {
+      const match = data.find((c) => c.id === wantedCourse || c.course_code === wantedCourse)
+      if (match) {
+        select.value = match.id
+        showTab('register')
+      }
+    }
+  } catch {
+    return
+  }
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const email = $('lEmail').value.trim().toLowerCase()
+  const password = $('lPass').value
+  if (!email || !password) return toast('Enter your email and password.', 'warn')
+  if (!supabase) return toast('Login is not available right now.', 'err')
+  const btn = $('loginBtn')
+  btn.disabled = true
+  try {
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      btn.disabled = false
+      return toast('Wrong email or password.', 'err')
+    }
+    toast('Login successful.')
+    setTimeout(() => (location.href = 'dashboard.html'), 700)
+  } catch {
+    btn.disabled = false
+    toast('Network error. Check your connection.', 'err')
+  }
+})
+
+function deviceInfo() {
+  return {
+    platform: navigator.platform || '',
+    language: navigator.language || '',
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+    screen: `${screen.width}x${screen.height}`,
+    pixel_ratio: window.devicePixelRatio || 1,
+    touch: navigator.maxTouchPoints > 0,
+    memory: navigator.deviceMemory || null,
+    cores: navigator.hardwareConcurrency || null
+  }
+}
+
+let registering = false
+
+regForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  if (registering) return
+  const payload = {
+    full_name: $('rName').value.trim(),
+    email: $('rEmail').value.trim().toLowerCase(),
+    phone: $('rPhone').value.trim(),
+    gender: $('rGender').value,
+    course_id: $('rCourse').value || null,
+    password: $('rPass').value,
+    device: deviceInfo()
+  }
+  if (payload.full_name.length < 3) return toast('Enter your full name.', 'warn')
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(payload.email)) return toast('Enter a valid email address.', 'warn')
+  if (!/^\+?[0-9\s-]{7,16}$/.test(payload.phone)) return toast('Enter a valid phone number.', 'warn')
+  if (!payload.gender) return toast('Select your gender.', 'warn')
+  if (REQUIRE_COURSE && !payload.course_id) return toast('Select a course.', 'warn')
+  if (payload.password.length < 8) return toast('Password must be at least 8 characters.', 'warn')
+  if (payload.password !== $('rPass2').value) return toast('Passwords do not match.', 'err')
+
+  const btn = $('regBtn')
+  registering = true
+  btn.disabled = true
+  try {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    const out = await res.json().catch(() => ({}))
+    if (!res.ok) {
+      toast(out.error || 'Registration failed. Try again.', 'err')
+    } else {
+      toast('Account created. Please log in to continue.')
+      $('lEmail').value = payload.email
+      regForm.reset()
+      showTab('login')
+    }
+  } catch {
+    toast('Network error. Check your connection.', 'err')
+  }
+  registering = false
+  btn.disabled = false
+})
+
+if (params.get('tab') === 'register') showTab('register')
+loadCourses()
+</script>
+</body>
+</html>
