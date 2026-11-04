@@ -81,6 +81,7 @@ export async function onRequestPost({ request, env }) {
     const cf = request.cf || {}
 
     let saved = false
+    let lastError = ''
     for (let i = 0; i < 5 && !saved; i++) {
       const res = await fetch(`${base}/rest/v1/user_profiles`, {
         method: 'POST',
@@ -111,24 +112,26 @@ export async function onRequestPost({ request, env }) {
         saved = true
       } else {
         const text = await res.text()
+        lastError = text.slice(0, 300)
         if (!/user_code/.test(text)) break
       }
     }
 
     if (!saved) {
       await fetch(`${base}/auth/v1/admin/users/${userId}`, { method: 'DELETE', headers })
-      return json({ error: 'Registration failed. Please try again.' }, 500)
+      return json({ error: 'Registration failed. Please try again.', detail: lastError }, 500)
     }
 
     return json({ ok: true })
-  } catch {
+  } catch (err) {
+    const detail = String((err && err.message) || err).slice(0, 300)
     if (userId) {
       try {
         await fetch(`${base}/auth/v1/admin/users/${userId}`, { method: 'DELETE', headers })
       } catch {
-        return json({ error: 'Server error. Please try again.' }, 500)
+        return json({ error: 'Server error. Please try again.', detail }, 500)
       }
     }
-    return json({ error: 'Server error. Please try again.' }, 500)
+    return json({ error: 'Server error. Please try again.', detail }, 500)
   }
 }
