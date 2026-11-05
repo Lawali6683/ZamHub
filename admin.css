@@ -81,3 +81,15 @@ body{background:linear-gradient(160deg,#fff 0%,#eaf8ee 60%,#fdecec 100%);padding
 .qc header{display:flex;justify-content:space-between;align-items:center;font-weight:700;color:var(--green-d)}
 .qc .x{border:0;background:transparent;color:var(--red);cursor:pointer;font-size:1.1rem}
 .sum{background:#eaf8ee;border-radius:12px;padding:10px 14px;font-weight:600;color:var(--green-d)}
+html{overflow-x:hidden}
+.gate{display:flex;align-items:flex-start}
+.gate-card{margin:auto;width:min(100%,520px)}
+.row{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.ti{flex-wrap:wrap}
+.ti .t{min-width:120px}
+.ti .btn,.ti .ibtn,.ibtn{flex:none}
+.btn{white-space:nowrap}
+.acts .btn{flex:1 1 auto}
+.top h1{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.panel,.wrap{min-width:0}
