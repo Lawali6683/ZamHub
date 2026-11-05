@@ -13,7 +13,7 @@ async function sha(text) {
 function overlay(html) {
   const g = document.createElement('div')
   g.className = 'gate'
-  g.innerHTML = '<div class="gate-card"><img src="' + LOGO + '" alt="ZamHub">' + html + '</div>'
+  g.innerHTML = '<div class="gate-card"><a class="ibtn" href="index.html" aria-label="Close" style="margin-left:auto"><i class="fa-solid fa-xmark"></i></a><img src="' + LOGO + '" alt="ZamHub">' + html + '</div>'
   document.body.appendChild(g)
   return g
 }
