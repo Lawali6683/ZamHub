@@ -43,22 +43,37 @@ async function load(reset) {
     : '<p>No users found.</p>'
 }
 
-function overlay(html) {
+function overlay(html, onClose) {
   const g = document.createElement('div')
   g.className = 'gate'
   g.innerHTML = `<div class="gate-card" style="text-align:left"><button class="ibtn" data-x aria-label="Close" style="margin-left:auto"><i class="fa-solid fa-xmark"></i></button>${html}</div>`
-  g.querySelector('[data-x]').addEventListener('click', () => g.remove())
+  const key = (e) => {
+    if (e.key === 'Escape') close()
+  }
+  const close = () => {
+    document.removeEventListener('keydown', key)
+    g.remove()
+    if (onClose) onClose()
+  }
+  g.querySelector('[data-x]').addEventListener('click', close)
+  g.addEventListener('click', (e) => {
+    if (e.target === g) close()
+  })
+  document.addEventListener('keydown', key)
+  g.close = close
   document.body.appendChild(g)
   return g
 }
 
 function confirmBox(msg) {
   return new Promise((res) => {
-    const g = overlay(`<h2>Please confirm</h2><p>${esc(msg)}</p><div class="acts"><button class="btn red" data-ok type="button">OK</button><button class="btn line" data-no type="button">Cancel</button></div>`)
+    let done = false
+    const g = overlay(`<h2>Please confirm</h2><p>${esc(msg)}</p><div class="acts"><button class="btn red" data-ok type="button">OK</button><button class="btn line" data-no type="button">Cancel</button></div>`, () => {
+      if (!done) res(false)
+    })
     g.style.zIndex = 950
-    g.querySelector('[data-ok]').addEventListener('click', () => { g.remove(); res(true) })
-    g.querySelector('[data-no]').addEventListener('click', () => { g.remove(); res(false) })
-    g.querySelector('[data-x]').addEventListener('click', () => res(false))
+    g.querySelector('[data-ok]').addEventListener('click', () => { done = true; g.close(); res(true) })
+    g.querySelector('[data-no]').addEventListener('click', () => g.close())
   })
 }
 
@@ -129,6 +144,52 @@ $('more').addEventListener('click', () => {
 $('list').addEventListener('click', (e) => {
   const b = e.target.closest('[data-v]')
   if (b) view(rows.find((u) => u.id === b.dataset.v))
+})
+
+async function findCourse(q) {
+  const t = q.trim()
+  let req = supabase.from('view_courser').select('*')
+  req = /^[0-9a-f-]{36}$/i.test(t) ? req.eq('id', t) : req.eq('course_code', t)
+  const { data: c, error } = await req.maybeSingle()
+  if (error || !c) {
+    $('cres').innerHTML = ''
+    return toast('No course found with this code or ID.', 'err')
+  }
+  const [{ data: tp }, { count }] = await Promise.all([
+    supabase.from('course_topic').select('id,topic_no,topic_name,is_final').eq('course_id', c.id).order('topic_no'),
+    supabase.from('user_courses').select('id', { count: 'exact', head: true }).eq('course_id', c.id)
+  ])
+  const topics = tp || []
+  $('cres').innerHTML = `<div class="course-head"><img src="${esc(c.image_url || 'https://i.imgur.com/d6TxLMp.png')}" alt=""><div><b>${esc(c.course_name)}</b><br><small>${esc(c.course_code)} - ${naira(c.price)}</small><br><span class="badge">${topics.length} topics</span> <span class="badge">${count || 0} learners</span></div></div>
+  <div class="tl" style="margin-top:12px">${topics.length ? topics.map((x) => `<div class="ti"><span class="n">${x.topic_no}</span><span class="t">${esc(x.topic_name)}${x.is_final ? ' <span class="fin">Final</span>' : ''}</span><button class="btn red" data-dt="${x.id}" type="button">Delete</button></div>`).join('') : '<p>This course has no topics.</p>'}</div>
+  <div class="acts" style="margin-top:14px"><button class="btn red" id="dc" type="button"><i class="fa-solid fa-trash"></i> Delete whole course</button></div>`
+  const refresh = () => findCourse(c.id)
+  $('dc').addEventListener('click', async () => {
+    if (!(await confirmBox(`Delete "${c.course_name}" completely? This removes its ${topics.length} topics, quizzes and the access of ${count || 0} learner(s). This cannot be undone.`))) return
+    const { error: de } = await supabase.from('view_courser').delete().eq('id', c.id)
+    if (de) return toast('Could not delete the course.', 'err')
+    $('cres').innerHTML = ''
+    $('cq').value = ''
+    toast('Course deleted.')
+  })
+  $('cres').onclick = async (e) => {
+    const b = e.target.closest('[data-dt]')
+    if (!b) return
+    if (!(await confirmBox('Delete this topic?'))) return
+    const gone = topics.find((x) => x.id === b.dataset.dt)
+    const { error: te } = await supabase.from('course_topic').delete().eq('id', gone.id)
+    if (te) return toast('Could not delete the topic.', 'err')
+    for (const x of topics.filter((y) => y.topic_no > gone.topic_no)) {
+      await supabase.from('course_topic').update({ topic_no: x.topic_no - 1 }).eq('id', x.id)
+    }
+    toast('Topic deleted.')
+    refresh()
+  }
+}
+
+$('cf').addEventListener('submit', (e) => {
+  e.preventDefault()
+  findCourse($('cq').value)
 })
 
 initAdmin().then(() => {
